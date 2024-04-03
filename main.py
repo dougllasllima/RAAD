@@ -1,94 +1,88 @@
-'''arquivo = open("texto.txt","r")
-print(arquivo.read())'''
-'''print(arquivo.readline())
-print(arquivo.readline())
-print(arquivo.seek(0))
-print(arquivo.readlines())
-#print(arquivo.seek(0))'''
-'''print(arquivo.tell())
-arquivo.close()
-print(arquivo.closed)'''
-'''print(arquivo.read())
-print(arquivo.seek(0))
-print(arquivo.read(8))'''
-'''print(arquivo.name)
-print(arquivo.mode)
-print(arquivo.closed)'''
+import tkinter as tk
+from tkinter import ttk
+import modelo as crud
 
-'''arquivo = open("novo.txt","w")
-arquivo.write("Arquivo de escrita")
-arquivo.close()
-print(arquivo.closed)'''
+class PrincipalBD():
+    def __init__(self, win):
+        self.objBD = crud.AppBD()
+        self.janela = win
 
-'''arquivo = open("frutas.txt","w")
-arquivo.write("banana")
-arquivo.write("uva")
-arquivo.write("mamao")
-arquivo.close()'''
+        self.treeProdutos = ttk.Treeview(self.janela, 
+                                              columns=("Código do Produto",
+                                                        "Nome", 
+                                                        "Preço"))
+        self.treeProdutos.heading("Código do Produto", text="Código do Produto:")
+        self.treeProdutos.heading("Nome", text="Nome:")
+        self.treeProdutos.heading("Preço", text="Preço:")
+        self.treeProdutos.pack()
 
-'''precos = [20,100,500,600]
-with open("precos_roupas.txt","w") as arquivo:
- for preco in precos:
-     arquivo.write(str(preco) + '\n')
-print(arquivo.closed)'''
+        self.lblNome = tk.Label(self.janela, text="Nome:")
+        self.lblNome.pack()
+        self.entryNome = tk.Entry(self.janela)
+        self.entryNome.pack()
 
-'''precos =  [8000]
-with open("precos_roupas.txt","a") as arquivo:
-    for preco in precos:
-        arquivo.write(str(preco) + '\n')'''
-'''precos = [100000]
-with open("precos_roupas", "w") as arquivo:
-    for preco in precos:
-        arquivo.write(str(preco) + '\n')'''
-
-disciplinas = ["Rad \n", "intordução a C \n", "Programação 1 \n"]
-'''with open("disciplinas.txt", "w") as file:
-    file.write("Relação de disciplinas \n")
-    file.writelines(disciplinas)
-
-with open("disciplinas.txt", "r") as file:
-    print(file.read())'''
-
-'''with open("texto.txt","r") as arquivo:
-    print("Representação original da linha")
-    #for linha in arquivo:
-        #print(repr(linha))
-
-with open("texto.txt", "r") as arquivo:
-    print("Conteudo da linha")
-    for linha in arquivo:
-        linha_ = linha.strip()
-        print(repr(linha_))'''
-
-'''minha_lista = ["Arroz", "feijao","Carne"]
-lista_ = '.'.join(minha_lista)
-with open("texto_.txt","w") as arquivo:
- arquivo.write(lista_)'''
-
-'''try:
-     with open("arquivo_teste.txt","r") as arquivo:
-         print(arquivo.read())
-except FileNotFoundError:
-    print("Arquivo inexistente")'''
-
-'''import os 
-try:
-    os.remove("teste.txt")
-    print("Arquivo foi removido")
-except FileNotFoundError as erro:
-    print("arquivo ")
-    print("descrição", erro)'''
-
-try:
-    f = open("novo2.txt","r")
-    f.write("Hello")
-except IOError as erro:
-    print("O erro foi", erro)
-
-
-
- 
+        self.lblPreco = tk.Label(self.janela, text="Preço:")
+        self.lblPreco.pack()
+        self.entryPreco = tk.Entry(self.janela)
+        self.entryPreco.pack()
+self.cadrastrar = tk.button(self.janela
+text="preço:")
+self.iblPreço.pack()
+self.entryPreco = tk.Entry(self.janela)
+self.entryPreco.pack()
 
 
 
 
+def ExibirTela(self):
+    try:
+        print("*****dados*****")
+        products = self.objBD.select_all_products()
+        for product in products:
+            self.treeProdutos.insert("", tk.END, valoues=product)
+            except:
+                print ("não foi possivel exibir os campos")
+
+
+
+def fcadrastroProduto(self):
+    try
+    name = self.entryMone.get()
+    price = float(self.entryPreco.get())
+    self.objBD.inserirDados(name,price)
+    self.entryMone.delete(0, tk END)
+    self.entryPreco.delete(0, tk END)
+    print("produto cadrastrado")
+    except Exception as error:
+    print("produto não cadrastrado" ,error)
+
+
+    def atualizarProduto(self)
+    try:
+        selectd_item = self.treeProdutos.selection()
+        if not selectd_item:
+            return
+            iten = self.treeProdutos.item(selectd_item)
+            print(item)
+            product = item["values"]
+            product_id = product[0]
+            nome = self.entryNome.get()
+            preco = float(self_entryPreco.get())
+            self.objBD.update_product(product_id,nomepreco)
+            self.ExibirTela()
+            self.entryMone.delete(0, tk.END)
+            self_entryPreco.delete(0, tk.END)
+            print("produto atualizado com sucesso")
+            except Exception as e:
+                print("não foi possivel fazer a atualização," e)
+
+                def delete_product(self)
+                try:
+                    selectd_item = self.treeProdutos.selection
+
+
+janela = tk.Tk()
+product_app = PrincipalBD(janela)
+janela.title("Bem vindo a aplicação de banco de dados")
+janela.geometry("900x700")
+janela.mainloop()
