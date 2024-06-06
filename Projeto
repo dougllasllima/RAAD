@@ -1,0 +1,72 @@
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///missions.db'
+db = SQLAlchemy(app)
+
+class Mission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    launch_date = db.Column(db.Date, nullable=False)
+    destination = db.Column(db.String(100), nullable=False)
+    mission_status = db.Column(db.String(50), nullable=False)
+    crew = db.Column(db.String(200), nullable=False)
+    payload = db.Column(db.String(200), nullable=False)
+    mission_duration = db.Column(db.Interval, nullable=False)
+    mission_cost = db.Column(db.Float, nullable=False)
+    mission_status_details = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return '<Mission %r>' % self.id
+
+@app.route('/')
+def index():
+    missions = Mission.query.order_by(Mission.launch_date.desc()).all()
+    return render_template('index.html', missions=missions)
+
+@app.route('/mission/<int:id>')
+def mission(id):
+    mission = Mission.query.get_or_404(id)
+    return render_template('mission.html', mission=mission)
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST':
+        name = request.form['name']
+        launch_date = datetime.strptime(request.form['launch_date'], '%Y-%m-%d').date()
+        destination = request.form['destination']
+        mission_status = request.form['mission_status']
+        crew = request.form['crew']
+        payload = request.form['payload']
+        mission_duration = request.form['mission_duration']
+        mission_cost = request.form['mission_cost']
+        mission_status_details = request.form['mission_status_details']
+
+        new_mission = Mission(name=name, launch_date=launch_date, destination=destination, mission_status=mission_status,
+                              crew=crew, payload=payload, mission_duration=mission_duration,
+                              mission_cost=mission_cost, mission_status_details=mission_status_details)
+
+        try:
+            db.session.add(new_mission)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue adding your mission'
+    else:
+        return render_template('add.html')
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    mission_to_delete = Mission.query.get_or_404(id)
+
+    try:
+        db.session.delete(mission_to_delete)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return 'There was a problem deleting that mission'
+
+if __name__ == "__main__":
+    app.run(debug=True)
